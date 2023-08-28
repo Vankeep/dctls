@@ -1,0 +1,18 @@
+
+DEFINE_UI_PARAMS(slider, Slider, DCTLUI_SLIDER_FLOAT, 0.0f, -1.0f, 1.0f, 0.001f)
+DEFINE_UI_PARAMS(checkBox, Check Box, DCTLUI_CHECK_BOX, 0)
+DEFINE_UI_PARAMS(comboBox, Combo Box, DCTLUI_COMBO_BOX, 0, { RED, BLUE }, { Red, Blue })
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B){       
+     float3 in = make_float3(p_R, p_G, p_B);
+     float3 out = in;
+
+     return out;
+}
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, __TEXTURE__ p_TexR, __TEXTURE__ p_TexG, __TEXTURE__ p_TexB){ 
+     float3 in = make_float3(_tex2D(p_TexR, p_X, p_Y), _tex2D(p_TexG, p_X, p_Y), _tex2D(p_TexB, p_X, p_Y));
+     float3 out = in;
+
+     return out;
+}

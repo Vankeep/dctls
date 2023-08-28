@@ -1,0 +1,20 @@
+__DEVICE__ float3 RGBtoYUV(float3 RGB){
+     float Y = 0.299 * RGB.x + 0.587 * RGB.y + 0.114 * RGB.z;
+     float U = (RGB.z - Y) * 0.492;
+     float V = (RGB.x - Y) * 0.877;
+
+     Y = _fminf(_fmaxf(Y, 0), 1);
+     U = _fminf(_fmaxf(U, -0.436f), 0.436f);  
+     V = _fminf(_fmaxf(V, -0.615f), 0.615f);  
+     return make_float3(Y,U,V);
+}
+__DEVICE__ float3 YUVtoRGB(float3 YUV){
+     YUV.x = _fminf(_fmaxf(YUV.x, 0), 1);
+     YUV.y = _fminf(_fmaxf(YUV.y, -0.436f), 0.436f);
+     YUV.z = _fminf(_fmaxf(YUV.z, -0.615f), 0.615f);
+
+     float red = YUV.x + 1.13983 * YUV.z;
+     float green = YUV.x - 0.39465 * YUV.y - 0.58060 * YUV.z;
+     float blue = YUV.x + 2.03211 * YUV.y;
+     return make_float3(red,green,blue);
+}

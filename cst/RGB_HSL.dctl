@@ -22,7 +22,7 @@ __DEVICE__  float3 RGBtoHSL(float3 RGB){
      return HSL;
 }
 
-__DEVICE__ float3 HSLtoRGB(float h, float s, float l) {
+__DEVICE__ float3 HSLtoRGB(float3 HSL) {
     float H = _fmod(HSL.x * 360.0f, 360.0f);
     float C = (1.0f - _fabs(2.0f * HSL.z - 1.0f)) * HSL.y;
     float X = C * (1 - _fabs(_fmod(H / 60.0f, 2.0f) - 1.0f));

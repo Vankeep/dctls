@@ -1,0 +1,48 @@
+__DEVICE__  float3 RGBtoHSL(float3 RGB){
+     float3 HSL;
+     float max = _fmaxf(RGB.x, _fmaxf(RGB.y, RGB.z)); 
+     float min = _fminf(RGB.x, _fminf(RGB.y, RGB.z));
+     float d = max - min;
+     HSL.z = (max + min) / 2.0;
+
+     if (d == 0.0) {
+         HSL.x = HSL.y = 0.0;
+     }
+     else {
+         HSL.y = HSL.z > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+         if (max == RGB.x)
+             HSL.x = (RGB.y - RGB.z) / d + (RGB.y < RGB.z ? 6.0 : 0.0);
+         else if (max == RGB.y)
+             HSL.x = (RGB.z - RGB.x) / d + 2.0;
+         else
+             HSL.x = (RGB.x - RGB.y) / d + 4.0;
+         HSL.x /= 6.0;
+     }
+     return HSL;
+}
+
+__DEVICE__ float3 HSLtoRGB(float h, float s, float l) {
+    float H = _fmod(HSL.x * 360.0f, 360.0f);
+    float C = (1.0f - _fabs(2.0f * HSL.z - 1.0f)) * HSL.y;
+    float X = C * (1 - _fabs(_fmod(H / 60.0f, 2.0f) - 1.0f));
+    float m = HSL.z - (C / 2.0f);
+
+    float3 colorp;
+
+    if (0.0f <= H && H < 60.0f) {
+        colorp = make_float3(C, X, 0.0f);
+    } else if (60.0f <= H && H <= 120.0f) {
+        colorp = make_float3(X, C, 0.0f);
+    } else if (120.0f <= H && H <= 180.0f) {
+        colorp = make_float3(0.0f, C, X);
+    } else if (180.0f <= H && H <= 240.0f) {
+        colorp = make_float3(0.0f, X, C);
+    } else if (240.0f <= H && H <= 300.0f) {
+        colorp = make_float3(X, 0.0f, C);
+    } else {
+        colorp = make_float3(C, 0.0f, X);
+    }
+    float3 RGB = make_float3(colorp.x + m, colorp.y + m, colorp.z + m);
+    return RGB;
+}

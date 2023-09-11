@@ -1,23 +1,24 @@
 __DEVICE__ float3 RGBtoTSL(float3 rgb){
-    float R_R = rgb.x;
-    float G_G = rgb.y;
-    float B_B = rgb.z;
+     float PI = 3.141592653589793f;
+     float R_R = rgb.x;
+     float G_G = rgb.y;
+     float B_B = rgb.z;
 
-    float r = R_R/(R_R + G_G + B_B);
-    float g = G_G/(R_R + G_G + B_B);
-    float r_ = r - (1.0/3.0);
-    float g_ = g - (1.0/3.0);
+     float r = R_R/(R_R + G_G + B_B);
+     float g = G_G/(R_R + G_G + B_B);
+     float r_ = r - (1.0/3.0);
+     float g_ = g - (1.0/3.0);
 
-    float T;
-    if (g_ > 0) {
-        T = (1.0/2.0 * PI) * _atan2f(r_, g_) + 1.0/4.0;
-    } else if (g_ < 0){
-        T = (1.0/2.0 * PI) * _atan2f(r_, g_) + 3.0/4.0;
-    } else {
-        T = 0;
-    }
-    float S = _sqrtf((9.0/5.0)*(_powf(r_,2) + _powf(g_,2)));
-    float L = 0.299 * R_R + 0.587 * G_G + 0.114 * B_B;
+     float T;
+     if (g_ > 0) {
+         T = (1.0/2.0 * PI) * _atan2f(r_, g_) + 1.0/4.0;
+     } else if (g_ < 0){
+         T = (1.0/2.0 * PI) * _atan2f(r_, g_) + 3.0/4.0;
+     } else {
+         T = 0;
+     }
+     float S = _sqrtf((9.0/5.0)*(_powf(r_,2) + _powf(g_,2)));
+     float L = 0.299 * R_R + 0.587 * G_G + 0.114 * B_B;
 
 	return make_float3(T, S, L);
 }

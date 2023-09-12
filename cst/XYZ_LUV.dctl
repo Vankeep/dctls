@@ -1,0 +1,59 @@
+
+__DEVICE__ XYZtoLUV(float3 XYZ){
+     float _u, _v, l, u, v, x, y, z, Xn, yn, Zn, un, vn;
+
+	float e = 0.008856451679035631f; //(6/29)^3
+	float k = 903.2962962962961f; //(29/3)^3
+     float3 D65 = make_float3(95.045592705167f, 100.0f, 108.9057750759878f);
+	Xn = D65.x;
+	Yn = D65.y;
+	Zn = D65.z;
+
+	un = (4 * Xn) / (Xn + (15 * Yn) + (3 * Zn));
+	vn = (9 * Yn) / (Xn + (15 * Yn) + (3 * Zn));
+
+	x = XYZ.x, y = XYZ.y, z = XYZ.z;
+
+	_u = (4 * x) / (x + (15 * y) + (3 * z));
+	_v = (9 * y) / (x + (15 * y) + (3 * z));
+
+	float yr = y/Yn;
+
+	l = yr <= e ? k * yr : 116 * _powf(yr, 1/3) - 16;
+
+	u = 13 * l * (_u - un);
+	v = 13 * l * (_v - vn);
+     float3 LUV = make_float3(l, u, v);
+	return LUV;
+}
+
+__DEVICE__ LUVtoXYZ(float3 LUV){
+     float a, b, c, d, u0, v0, Xr, Yr, Zr, L, u, v, e, k;
+     float3 D65 = make_float3(95.045592705167f, 100.0f, 108.9057750759878f);
+	e = 0.008856451679035631f; //(6/29)^3
+	k = 903.2962962962961f; //(29/3)^3
+	Xr = D65.x;
+	Yr = D65.y;
+	Zr = D65.z;
+     L = LUV.x;
+     u = LUV.y;
+     v = LUV.z; 
+
+     float Y = L > k*e ? _powf(((L + 16.0f)/116.0f),3.0f) : L/k;
+     uO = (4.0f * Xr)/(Xr + (15.0f * Yr) + (3.0f * Zn));
+     vO = (9.0f * Yr)/(Xr + (15.0f * Yr) + (3.0f * Zn));
+     a = (1.0/3.0)*(((52.0f * L)/(u+13*L*u0))-1);
+     b = -5.0f*Y;
+     c = -1.0f/3.0f;
+     d = Y * ((39.0f * L)/(u + (13.0f * L * v0))-5.0f);
+
+     float X = (d - b)/(a -c);
+     float Z = (X * a) + b;
+
+     float3 XYZ = make_float3(X, Y, Z);
+	return XYZ;
+}
+
+
+
+

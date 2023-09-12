@@ -1,24 +1,24 @@
 
 __DEVICE__ float3 XYZtoLUV(float3 XYZ){
-    float X = XYZ.x;
-	float Y = XYZ.y;
-	float Z = XYZ.z;
-    float Un = 0.197839f; 
+     float X = XYZ.x;
+     float Y = XYZ.y;
+     float Z = XYZ.z;
+     float Un = 0.197839f; 
 	float Vn = 0.468342f;
 	float Up = 4.0f * X / (X + 15.0f * Y + 3.0f * Z);
 	float Vp = 9.0f * Y / (X + 15.0f * Y + 3.0f * Z);
 	float L = 116.0f * _powf(Y, 0.333333f) - 16.0f;
 	float U = 13.0f * L * (Up - Un);
 	float V = 13.0f * L * (Vp - Vn);
-    float3 LUV = make_float3(L,U,V);
+     float3 LUV = make_float3(L,U,V);
 	return LUV;
 }
 
 __DEVICE__ float3 LUVtoXYZ(float3 LUV){
-    float L = LUV.x;
+     float L = LUV.x;
 	float U = LUV.y;
 	float V = LUV.z;
-    float Un = 0.197839f;
+     float Un = 0.197839f;
 	float Vn = 0.468342f;
 	float X, Y, Z;
 	float Up = U / (13.0f * L) + Un;
@@ -26,7 +26,7 @@ __DEVICE__ float3 LUVtoXYZ(float3 LUV){
 	Y = _powf((L + 16.0f) / 116.0f, 3.0f);
 	X = Up * 9.0f * Y / (4 * Vp);
 	Z = (9.0f * Y - 15.0f * Vp * Y - Vp * X) / (3.0f * Vp);
-    float3 XYZ = make_float3(X,Y,Z);
+     float3 XYZ = make_float3(X,Y,Z);
 	return XYZ;
 }
 

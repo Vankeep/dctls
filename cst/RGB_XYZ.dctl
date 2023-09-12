@@ -7,7 +7,7 @@ __DEVICE__ float3 RGBtoXYZ(float3 RGB){
      XYZ.y = 0.2126729f * RGB.x + 0.7151522f * RGB.y + 0.0721750f * RGB.z;
      XYZ.z = 0.0193339f * RGB.x + 0.1191920f * RGB.y + 0.9503041f * RGB.z;
 
-     float XYZ;
+     return XYZ;
 }
 
 __DEVICE__ float3 XYZtoRGB(float3 XYZ){

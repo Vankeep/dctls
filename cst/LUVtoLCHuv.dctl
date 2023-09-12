@@ -1,0 +1,36 @@
+__DEVICE__ float3 LUVtoXYZ(float3 LUV){
+    float L = LUV.x;
+	float U = LUV.y;
+	float V = LUV.z;
+    float Un = 0.197839f;
+	float Vn = 0.468342f;
+	float X, Y, Z;
+	float Up = U / (13.0f * L) + Un;
+	float Vp = V / (13.0f * L) + Vn;
+	Y = _powf((L + 16.0f) / 116.0f, 3.0f);
+	X = Up * 9.0f * Y / (4 * Vp);
+	Z = (9.0f * Y - 15.0f * Vp * Y - Vp * X) / (3.0f * Vp);
+    float3 XYZ = make_float3(X,Y,Z);
+	return XYZ;
+}
+
+__DEVICE__ float3 LUVtoLCHuv(float3 LUV){
+    float L = LUV.x;
+    float U = LUV.y;
+    float V = LUV.z;
+
+	float C = _sqrtf(U * U + V * V);
+	float H;
+	if (C < 0.00000001f) {
+		H = 0.0f;
+	} else {
+		float Hrad = _atan2f(V, U);
+		H = (Hrad * 180.0f) / 3.1415926535897932f;
+
+		if (H < 0.0f) {
+			H = 360.0f + H;
+		}
+	}
+    float3 LCHuv = make_float3(L,C,H);
+	return LCHuv;
+}

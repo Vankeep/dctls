@@ -1,0 +1,22 @@
+__DEVICE__ float3 RGBtoXYZ(float3 RGB){
+     RGB.x = (RGB.x >= 0.08145f) ? _powf((RGB.x + 0.0993f) * (1.0f / 1.0993f), (1.0f / 0.45f)) : (RGB.x < 0.0f) ? 0.0f : RGB.x * (1.0f / 4.5f);
+     RGB.y = (RGB.y >= 0.08145f) ? _powf((RGB.y + 0.0993f) * (1.0f / 1.0993f), (1.0f / 0.45f)) : (RGB.y < 0.0f) ? 0.0f : RGB.y * (1.0f / 4.5f);
+     RGB.z = (RGB.z >= 0.08145f) ? _powf((RGB.z + 0.0993f) * (1.0f / 1.0993f), (1.0f / 0.45f)) : (RGB.z < 0.0f) ? 0.0f : RGB.z * (1.0f / 4.5f);
+     float3 XYZ;
+     XYZ.x = 0.4124564f * RGB.x + 0.3575761f * RGB.y + 0.1804375f * RGB.z;
+     XYZ.y = 0.2126729f * RGB.x + 0.7151522f * RGB.y + 0.0721750f * RGB.z;
+     XYZ.z = 0.0193339f * RGB.x + 0.1191920f * RGB.y + 0.9503041f * RGB.z;
+
+     float XYZ;
+}
+
+__DEVICE__ float3 XYZtoRGB(float3 XYZ){
+     float3 RGB;
+     RGB.x = 3.2404542f * XYZ.x + -1.5371385f * XYZ.y + -0.4985314f * XYZ.z;
+     RGB.y = -0.9692660f * XYZ.x + 1.8760108f * XYZ.y + 0.0415560f * XYZ.z;
+     RGB.z = 0.0556434f * XYZ.x + -0.2040259f * XYZ.y + 1.0572252f * XYZ.z;
+     RGB.x = (RGB.x >= 0.0181f) ? 1.0993f * _powf(RGB.x, 0.45f) - 0.0993f : (RGB.x < 0.0f) ? 0.0f : RGB.x * 4.5f;
+     RGB.y = (RGB.y >= 0.0181f) ? 1.0993f * _powf(RGB.y, 0.45f) - 0.0993f : (RGB.y < 0.0f) ? 0.0f : RGB.y * 4.5f;
+     RGB.z = (RGB.z >= 0.0181f) ? 1.0993f * _powf(RGB.z, 0.45f) - 0.0993f : (RGB.z < 0.0f) ? 0.0f : RGB.z * 4.5f;
+     return RGB;
+}
